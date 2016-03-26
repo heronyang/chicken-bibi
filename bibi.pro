@@ -17,4 +17,9 @@ RESOURCES += \
     application.qrc
 
 DISTFILES += \
-    res/background.gif
+    res/background.gif \
+    res/buttonEat.png \
+    res/buttonHeal.png \
+    res/buttonShower.png \
+    res/buttonTurnOffLight.png \
+    res/buttonPlay.png
