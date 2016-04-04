@@ -23,6 +23,21 @@ private:
     void setupUiComponents();
     void setupBackground();
     void setupButtons();
+    void setupBibi();
+    int backgroundAnimationTimerId;
+    int backgroundImageOffset = 0;
+    int backgroundImageFaceRight = true;
+    void checkAndTurnBackgroundImageFacing();
+
+protected:
+    void timerEvent(QTimerEvent *event);
+
+private slots:
+    void buttonEatHandler();
+    void buttonShowerHandler();
+    void buttonHealHandler();
+    void buttonPlayHandler();
+    void buttonTurnOffLightHandler();
 
 };
 

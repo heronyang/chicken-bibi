@@ -1,10 +1,11 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-    <file alias="background">res/background.gif</file>
+    <file alias="background">res/background.png</file>
     <file alias="buttonEat">res/buttonEat.png</file>
     <file alias="buttonHeal">res/buttonHeal.png</file>
     <file alias="buttonPlay">res/buttonPlay.png</file>
     <file alias="buttonShower">res/buttonShower.png</file>
     <file alias="buttonTurnOffLight">res/buttonTurnOffLight.png</file>
+    <file alias="stateBorn">res/stateBorn.gif</file>
 </qresource>
 </RCC>
