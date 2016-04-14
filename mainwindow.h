@@ -26,35 +26,43 @@ private:
         walk,
         hungry,
         sick,
-        sleep,
+        sleepy,
         dirty,
         lightOff
     };
 
     enum Action {
         born,
+        happy,
         eat,
         heal,
-        turnOffLight,
         shower,
         play
     };
+
+    State currentState = normal;
+    QLabel *bibiContainer = NULL;
+    QLabel *lightOffContainer = NULL;
 
     void setupUiComponents();
     void setupStaticBackground();
     void setupAnimatedBackground();
     void setupButtons();
     void setupBibi();
-    void changeBibiToAction(Action);
+
+    void changeBibiToAction(Action, int);
+    void changeBibiToState(State);
+
+    void changeBibiAnimationTo(std::string);
+    void removePreviousAnimationIfExists();
 
     int backgroundAnimationTimerId;
     int backgroundImageOffset = 0;
     int backgroundImageFaceRight = true;
     void checkAndTurnBackgroundImageFacing();
-    void changeBibiAnimationTo(std::string);
 
-    QLabel *bibiContainer;
-
+    void turnOffLight();
+    void turnOnLight();
     void delay();
 
 protected:
@@ -68,6 +76,12 @@ private slots:
     void buttonTurnOffLightHandler();
 
     void actionFinishHandler();
+    void becomeHungry();
+    void becomeSick();
+    void becomeSleepy();
+    void becomeDirty();
+
+    void morningArrived();
 
 };
 

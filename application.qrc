@@ -1,17 +1,18 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <file alias="background">res/background.png</file>
-    <file alias="buttonEat">res/buttonEat.png</file>
-    <file alias="buttonHeal">res/buttonHeal.png</file>
-    <file alias="buttonPlay">res/buttonPlay.png</file>
-    <file alias="buttonShower">res/buttonShower.png</file>
-    <file alias="buttonTurnOffLight">res/buttonTurnOffLight.png</file>
-    <file alias="stateBorn">res/stateBorn.gif</file>
-    <file alias="stateHappy">res/stateHappy.gif</file>
-    <file alias="stateHungry">res/stateHungry.gif</file>
-    <file alias="stateNormal">res/stateNormal.gif</file>
-    <file alias="stateSick">res/stateSick.gif</file>
-    <file alias="stateSleep">res/stateSleep.gif</file>
-    <file alias="stateWalk">res/stateWalk.gif</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file alias="background">res/background.png</file>
+        <file alias="buttonEat">res/buttonEat.png</file>
+        <file alias="buttonHeal">res/buttonHeal.png</file>
+        <file alias="buttonPlay">res/buttonPlay.png</file>
+        <file alias="buttonShower">res/buttonShower.png</file>
+        <file alias="buttonTurnOffLight">res/buttonTurnOffLight.png</file>
+        <file alias="stateBorn">res/stateBorn.gif</file>
+        <file alias="stateHappy">res/stateHappy.gif</file>
+        <file alias="stateHungry">res/stateHungry.gif</file>
+        <file alias="stateNormal">res/stateNormal.gif</file>
+        <file alias="stateSick">res/stateSick.gif</file>
+        <file alias="stateSleep">res/stateSleep.gif</file>
+        <file alias="stateWalk">res/stateWalk.gif</file>
+        <file alias="lightOffScene">res/lightOffScene.gif</file>
+    </qresource>
 </RCC>

@@ -43,15 +43,22 @@ void MainWindow::setupAnimatedBackground() {
 }
 
 void MainWindow::setupBibi() {
-    changeBibiToAction(born);
+    changeBibiToAction(born, 7000);
 }
 
-void MainWindow::changeBibiToAction(Action action) {
+void MainWindow::changeBibiToAction(Action action, int duration) {
 
-    changeBibiAnimationTo(":/stateBorn");
+    switch (action) {
+    case born:
+        changeBibiAnimationTo(":/stateBorn");
+        break;
+    case happy:
+        changeBibiAnimationTo(":/stateHappy");
+        break;
+    }
 
     QTimer *timer = new QTimer(this);
-    timer->singleShot(6000, this, SLOT(actionFinishHandler()));
+    timer->singleShot(duration, this, SLOT(actionFinishHandler()));
 
 }
 
@@ -59,18 +66,53 @@ void MainWindow::actionFinishHandler() {
     changeBibiAnimationTo(":/stateNormal");
 }
 
+void MainWindow::changeBibiToState(State state) {
+
+    switch (state) {
+    case hungry:
+        changeBibiAnimationTo(":/stateHungry");
+        break;
+    case sick:
+        changeBibiAnimationTo(":/stateSick");
+        break;
+    case sleepy:
+        changeBibiAnimationTo(":/stateSleep");
+        break;
+    case dirty:
+        // TODO: wait for the gif file
+        break;
+
+    }
+
+}
+
+void MainWindow::becomeHungry() {
+    currentState = hungry;
+    changeBibiToState(hungry);
+}
+
+void MainWindow::becomeSick() {
+    currentState = sick;
+    changeBibiToState(sick);
+}
+
+void MainWindow::becomeSleepy() {
+    currentState = sleepy;
+    changeBibiToState(sleepy);
+}
+
+void MainWindow::becomeDirty() {
+    currentState = dirty;
+    changeBibiToState(dirty);
+}
+
 void MainWindow::changeBibiAnimationTo(std::string resName) {
 
-    if (bibiContainer != NULL) {
-        bibiContainer->deleteLater();
-        bibiContainer = NULL;
-    }
+    removePreviousAnimationIfExists();
 
     QMovie *bibi = new QMovie(QString::fromStdString(resName));
     if (!bibi->isValid()) {
         qDebug("bibi animation is not found");
-    } else {
-        qDebug("bibi animation is set");
     }
 
     bibiContainer = new QLabel(this);
@@ -79,6 +121,13 @@ void MainWindow::changeBibiAnimationTo(std::string resName) {
     bibiContainer->show();
     bibi->start();
 
+}
+
+void MainWindow::removePreviousAnimationIfExists() {
+    if (bibiContainer != NULL) {
+        bibiContainer->deleteLater();
+        bibiContainer = NULL;
+    }
 }
 
 void MainWindow::setupButtons() {
@@ -91,26 +140,62 @@ void MainWindow::setupButtons() {
 
 void MainWindow::buttonEatHandler() {
     qDebug("eat button clicked");
-    changeBibiAnimationTo(":/stateHappy");
+    // TODO: eating animation here
+    changeBibiToAction(happy, 5000);
 }
 
 void MainWindow::buttonShowerHandler() {
     qDebug("shower button clicked");
-    changeBibiAnimationTo(":/stateHappy");
+    QTimer *timer = new QTimer(this);
+    timer->singleShot(1000, this, SLOT(becomeSleepy()));
+    if(currentState != dirty) {
+        return;
+    }
+    changeBibiToAction(happy, 5000);
 }
 
 void MainWindow::buttonHealHandler() {
     qDebug("heal button clicked");
-    changeBibiAnimationTo(":/stateHappy");
+    changeBibiToAction(happy, 5000);
 }
 
 void MainWindow::buttonPlayHandler() {
     qDebug("play button clicked");
-    changeBibiAnimationTo(":/stateHappy");
+    changeBibiToAction(happy, 5000);
 }
 
 void MainWindow::buttonTurnOffLightHandler() {
     qDebug("turn off light button clicked");
+    turnOffLight();
+    QTimer *timer = new QTimer(this);
+    timer->singleShot(3000, this, SLOT(morningArrived()));
+    if(currentState != sleepy) {
+        return;
+    }
+}
+
+void MainWindow::turnOffLight() {
+    QMovie *lightOffScene = new QMovie(QString::fromStdString(":/lightOffScene"));
+    if (!lightOffScene->isValid()) {
+        qDebug("lightOffScene animation is not found");
+    }
+
+    lightOffContainer = new QLabel(this);
+    lightOffContainer->setMovie(lightOffScene);
+    lightOffContainer->setGeometry(0, 0, 600, 600);
+    lightOffContainer->show();
+    lightOffScene->start();
+}
+
+void MainWindow::turnOnLight() {
+    if(lightOffContainer != NULL) {
+        lightOffContainer->deleteLater();
+        lightOffContainer = NULL;
+    }
+}
+
+void MainWindow::morningArrived() {
+    turnOnLight();
 }
 
 MainWindow::~MainWindow() {
