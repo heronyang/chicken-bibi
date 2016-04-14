@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
 
 class QPushButton;
 
@@ -44,13 +45,15 @@ private:
     void setupAnimatedBackground();
     void setupButtons();
     void setupBibi();
-    void changeBibiToAction(Action, State);
-    void changeBibiAnimationTo(std::string);
+    void changeBibiToAction(Action);
 
     int backgroundAnimationTimerId;
     int backgroundImageOffset = 0;
     int backgroundImageFaceRight = true;
     void checkAndTurnBackgroundImageFacing();
+    void changeBibiAnimationTo(std::string);
+
+    QLabel *bibiContainer;
 
     void delay();
 
@@ -63,6 +66,8 @@ private slots:
     void buttonHealHandler();
     void buttonPlayHandler();
     void buttonTurnOffLightHandler();
+
+    void actionFinishHandler();
 
 };
 

@@ -5,6 +5,9 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QTime>
+#include <QTimer>
+#include <QThread>
+#include <QApplication>
 
 #include <string>
 
@@ -40,45 +43,40 @@ void MainWindow::setupAnimatedBackground() {
 }
 
 void MainWindow::setupBibi() {
-    changeBibiToAction(born, normal);
+    changeBibiToAction(born);
 }
 
-void MainWindow::changeBibiToAction(Action action, State finishState) {
+void MainWindow::changeBibiToAction(Action action) {
 
-    switch(action) {
-    case Action::born :
-        changeBibiAnimationTo(":/stateBorn");
-        changeBibiAnimationTo(":/stateNormal");
-        break;
-    case Action::eat :
-        break;
-    case Action::heal :
-        break;
-    case Action::turnOffLight :
-        break;
-    case Action::shower :
-        break;
-    case Action::play :
-        break;
-    }
+    changeBibiAnimationTo(":/stateBorn");
 
+    QTimer *timer = new QTimer(this);
+    timer->singleShot(6000, this, SLOT(actionFinishHandler()));
+
+}
+
+void MainWindow::actionFinishHandler() {
+    changeBibiAnimationTo(":/stateNormal");
 }
 
 void MainWindow::changeBibiAnimationTo(std::string resName) {
 
-    // TODO: remove previous bibi if exists (use class-life variable)
+    if (bibiContainer != NULL) {
+        bibiContainer->deleteLater();
+        bibiContainer = NULL;
+    }
 
     QMovie *bibi = new QMovie(QString::fromStdString(resName));
-
     if (!bibi->isValid()) {
         qDebug("bibi animation is not found");
     } else {
         qDebug("bibi animation is set");
     }
 
-    QLabel *bibiContainer = new QLabel(this);
+    bibiContainer = new QLabel(this);
     bibiContainer->setMovie(bibi);
-    bibiContainer->setGeometry(150, 150, 300, 300);
+    bibiContainer->setGeometry(150, 130, 300, 390);
+    bibiContainer->show();
     bibi->start();
 
 }
@@ -93,18 +91,22 @@ void MainWindow::setupButtons() {
 
 void MainWindow::buttonEatHandler() {
     qDebug("eat button clicked");
+    changeBibiAnimationTo(":/stateHappy");
 }
 
 void MainWindow::buttonShowerHandler() {
     qDebug("shower button clicked");
+    changeBibiAnimationTo(":/stateHappy");
 }
 
 void MainWindow::buttonHealHandler() {
     qDebug("heal button clicked");
+    changeBibiAnimationTo(":/stateHappy");
 }
 
 void MainWindow::buttonPlayHandler() {
     qDebug("play button clicked");
+    changeBibiAnimationTo(":/stateHappy");
 }
 
 void MainWindow::buttonTurnOffLightHandler() {
