@@ -20,14 +20,39 @@ public:
 private:
     Ui::MainWindow *ui;
 
+    enum State {
+        normal,
+        walk,
+        hungry,
+        sick,
+        sleep,
+        dirty,
+        lightOff
+    };
+
+    enum Action {
+        born,
+        eat,
+        heal,
+        turnOffLight,
+        shower,
+        play
+    };
+
     void setupUiComponents();
-    void setupBackground();
+    void setupStaticBackground();
+    void setupAnimatedBackground();
     void setupButtons();
     void setupBibi();
+    void changeBibiToAction(Action, State);
+    void changeBibiAnimationTo(std::string);
+
     int backgroundAnimationTimerId;
     int backgroundImageOffset = 0;
     int backgroundImageFaceRight = true;
     void checkAndTurnBackgroundImageFacing();
+
+    void delay();
 
 protected:
     void timerEvent(QTimerEvent *event);

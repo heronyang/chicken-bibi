@@ -4,6 +4,9 @@
 #include <QMovie>
 #include <QLabel>
 #include <QPushButton>
+#include <QTime>
+
+#include <string>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -11,22 +14,61 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
     setupUiComponents();
+
 }
 
 void MainWindow::setupUiComponents() {
-    setupBackground();
+    setupStaticBackground();
     setupButtons();
     setupBibi();
 }
 
-void MainWindow::setupBackground() {
+void MainWindow::setupStaticBackground() {
 
-    backgroundAnimationTimerId = startTimer(20);
+    QPixmap background(":/background");
+    QRegion exposed;
+    QPalette palette;
+
+    background.scroll(-backgroundImageOffset, 0, background.rect(), &exposed);
+    palette.setBrush(QPalette::Background, background);
+    this->setPalette(palette);
 
 }
 
+void MainWindow::setupAnimatedBackground() {
+    backgroundAnimationTimerId = startTimer(20);
+}
+
 void MainWindow::setupBibi() {
-    QMovie *bibi = new QMovie(":/stateBorn");
+    changeBibiToAction(born, normal);
+}
+
+void MainWindow::changeBibiToAction(Action action, State finishState) {
+
+    switch(action) {
+    case Action::born :
+        changeBibiAnimationTo(":/stateBorn");
+        changeBibiAnimationTo(":/stateNormal");
+        break;
+    case Action::eat :
+        break;
+    case Action::heal :
+        break;
+    case Action::turnOffLight :
+        break;
+    case Action::shower :
+        break;
+    case Action::play :
+        break;
+    }
+
+}
+
+void MainWindow::changeBibiAnimationTo(std::string resName) {
+
+    // TODO: remove previous bibi if exists (use class-life variable)
+
+    QMovie *bibi = new QMovie(QString::fromStdString(resName));
 
     if (!bibi->isValid()) {
         qDebug("bibi animation is not found");
@@ -38,6 +80,7 @@ void MainWindow::setupBibi() {
     bibiContainer->setMovie(bibi);
     bibiContainer->setGeometry(150, 150, 300, 300);
     bibi->start();
+
 }
 
 void MainWindow::setupButtons() {
@@ -99,5 +142,12 @@ void MainWindow::checkAndTurnBackgroundImageFacing() {
         backgroundImageFaceRight = false;
     } else if (backgroundImageOffset <= 0) {
         backgroundImageFaceRight = true;
+    }
+}
+
+void MainWindow::delay() {
+    QTime dieTime= QTime::currentTime().addSecs(1);
+    while (QTime::currentTime() < dieTime) {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
 }

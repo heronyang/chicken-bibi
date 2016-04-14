@@ -23,4 +23,11 @@ DISTFILES += \
     res/buttonTurnOffLight.png \
     res/buttonPlay.png \
     res/stateBorn.gif \
-    res/background.png
+    res/background.png \
+    res/stateHappy.gif \
+    res/stateHungry.gif \
+    res/stateLightOff.gif \
+    res/stateNormal.gif \
+    res/stateSick.gif \
+    res/stateSleep.gif \
+    res/stateWalk.gif

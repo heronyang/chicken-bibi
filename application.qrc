@@ -7,5 +7,11 @@
     <file alias="buttonShower">res/buttonShower.png</file>
     <file alias="buttonTurnOffLight">res/buttonTurnOffLight.png</file>
     <file alias="stateBorn">res/stateBorn.gif</file>
+    <file alias="stateHappy">res/stateHappy.gif</file>
+    <file alias="stateHungry">res/stateHungry.gif</file>
+    <file alias="stateNormal">res/stateNormal.gif</file>
+    <file alias="stateSick">res/stateSick.gif</file>
+    <file alias="stateSleep">res/stateSleep.gif</file>
+    <file alias="stateWalk">res/stateWalk.gif</file>
 </qresource>
 </RCC>
