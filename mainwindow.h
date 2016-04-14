@@ -28,7 +28,8 @@ private:
         sick,
         sleepy,
         dirty,
-        lightOff
+        lightOff,
+        inAction
     };
 
     enum Action {
@@ -49,6 +50,7 @@ private:
     void setupAnimatedBackground();
     void setupButtons();
     void setupBibi();
+    void setupHourClock();
 
     void changeBibiToAction(Action, int);
     void changeBibiToState(State);
@@ -56,8 +58,8 @@ private:
     void changeBibiAnimationTo(std::string);
     void removePreviousAnimationIfExists();
 
-    void walkInNormalState();
-    void standInNormalState();
+    void randomChangeToStand();
+    void randomChangeToWalk();
 
     int backgroundAnimationTimerId;
     int backgroundImageOffset = 0;
@@ -72,6 +74,9 @@ protected:
     void timerEvent(QTimerEvent *event);
 
 private slots:
+
+    void hourClockTickHandler();
+
     void buttonEatHandler();
     void buttonShowerHandler();
     void buttonHealHandler();
@@ -83,6 +88,9 @@ private slots:
     void becomeSick();
     void becomeSleepy();
     void becomeDirty();
+
+    void standInNormalState();
+    void walkInNormalState();
 
     void morningArrived();
 

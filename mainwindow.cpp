@@ -8,8 +8,10 @@
 #include <QTimer>
 #include <QThread>
 #include <QApplication>
+#include <QDateTime>
 
 #include <string>
+#include <ctime>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,6 +26,7 @@ void MainWindow::setupUiComponents() {
     setupStaticBackground();
     setupButtons();
     setupBibi();
+    setupHourClock();
 }
 
 void MainWindow::setupStaticBackground() {
@@ -46,7 +49,16 @@ void MainWindow::setupBibi() {
     changeBibiToAction(born, 7000);
 }
 
+void MainWindow::setupHourClock() {
+    QTimer *clock = new QTimer(this);
+    connect(clock, SIGNAL(timeout()), this, SLOT(hourClockTickHandler()));
+    clock->start(1000 * 60 * 60); // hourly
+}
+
+
 void MainWindow::changeBibiToAction(Action action, int duration) {
+
+    currentState = inAction;
 
     switch (action) {
     case born:
@@ -70,9 +82,10 @@ void MainWindow::changeBibiToState(State state) {
 
     currentState = state;
 
+
     switch (state) {
     case normal:
-        walkInNormalState();
+        standInNormalState();
         break;
     case hungry:
         changeBibiAnimationTo(":/stateHungry");
@@ -96,15 +109,48 @@ void MainWindow::walkInNormalState() {
         return;
     }
     setupAnimatedBackground();
-    changeBibiAnimationTo(":/stateWalk");
+    if(backgroundImageFaceRight) {
+        changeBibiAnimationTo(":/stateWalk");
+    } else {
+        changeBibiAnimationTo(":/stateWalkBackward");
+    }
+    randomChangeToStand();
+}
+
+void MainWindow::randomChangeToStand() {
+
+    srand(time(0));
+    int randomTime = ((rand() % 20) + 5) * 1000; // 20~40 seconds
+    qDebug("random change to stand time: %d", randomTime);
+
+    QTimer *timer = new QTimer(this);
+    timer->singleShot(randomTime, this, SLOT(standInNormalState()));
+
 }
 
 void MainWindow::standInNormalState() {
+
+    killTimer(backgroundAnimationTimerId);
+
+    qDebug("in normal state stand");
     if(currentState != normal) {
         return;
     }
     changeBibiAnimationTo(":/stateNormal");
+    randomChangeToWalk();
 }
+
+void MainWindow::randomChangeToWalk() {
+
+    srand(time(0));
+    int randomTime = ((rand() % 20) + 5) * 1000; // 20~40 second
+    qDebug("random change to walk time: %d", randomTime);
+
+    QTimer *timer = new QTimer(this);
+    timer->singleShot(randomTime, this, SLOT(walkInNormalState()));
+
+}
+
 
 void MainWindow::becomeHungry() {
     changeBibiToState(hungry);
@@ -144,6 +190,11 @@ void MainWindow::removePreviousAnimationIfExists() {
         bibiContainer->deleteLater();
         bibiContainer = NULL;
     }
+}
+
+void MainWindow::hourClockTickHandler() {
+    QDateTime now = QDateTime::currentDateTime();
+    qDebug("%s", qPrintable(now.toString()));
 }
 
 void MainWindow::setupButtons() {
