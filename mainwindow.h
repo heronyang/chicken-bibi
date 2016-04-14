@@ -56,6 +56,9 @@ private:
     void changeBibiAnimationTo(std::string);
     void removePreviousAnimationIfExists();
 
+    void walkInNormalState();
+    void standInNormalState();
+
     int backgroundAnimationTimerId;
     int backgroundImageOffset = 0;
     int backgroundImageFaceRight = true;

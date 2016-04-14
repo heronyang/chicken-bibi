@@ -13,6 +13,7 @@
         <file alias="stateSick">res/stateSick.gif</file>
         <file alias="stateSleep">res/stateSleep.gif</file>
         <file alias="stateWalk">res/stateWalk.gif</file>
+        <file alias="stateWalkBackward">res/stateWalkBackward.gif</file>
         <file alias="lightOffScene">res/lightOffScene.gif</file>
     </qresource>
 </RCC>

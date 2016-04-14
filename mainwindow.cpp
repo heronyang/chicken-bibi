@@ -63,12 +63,17 @@ void MainWindow::changeBibiToAction(Action action, int duration) {
 }
 
 void MainWindow::actionFinishHandler() {
-    changeBibiAnimationTo(":/stateNormal");
+    changeBibiToState(normal);
 }
 
 void MainWindow::changeBibiToState(State state) {
 
+    currentState = state;
+
     switch (state) {
+    case normal:
+        walkInNormalState();
+        break;
     case hungry:
         changeBibiAnimationTo(":/stateHungry");
         break;
@@ -86,23 +91,34 @@ void MainWindow::changeBibiToState(State state) {
 
 }
 
+void MainWindow::walkInNormalState() {
+    if(currentState != normal) {
+        return;
+    }
+    setupAnimatedBackground();
+    changeBibiAnimationTo(":/stateWalk");
+}
+
+void MainWindow::standInNormalState() {
+    if(currentState != normal) {
+        return;
+    }
+    changeBibiAnimationTo(":/stateNormal");
+}
+
 void MainWindow::becomeHungry() {
-    currentState = hungry;
     changeBibiToState(hungry);
 }
 
 void MainWindow::becomeSick() {
-    currentState = sick;
     changeBibiToState(sick);
 }
 
 void MainWindow::becomeSleepy() {
-    currentState = sleepy;
     changeBibiToState(sleepy);
 }
 
 void MainWindow::becomeDirty() {
-    currentState = dirty;
     changeBibiToState(dirty);
 }
 
@@ -227,8 +243,14 @@ void MainWindow::timerEvent(QTimerEvent *event) {
 void MainWindow::checkAndTurnBackgroundImageFacing() {
     if (backgroundImageOffset >= 1800 - 600) {
         backgroundImageFaceRight = false;
+        if(currentState == normal) {
+            changeBibiAnimationTo(":/stateWalkBackward");
+        }
     } else if (backgroundImageOffset <= 0) {
         backgroundImageFaceRight = true;
+        if(currentState == normal) {
+            changeBibiAnimationTo(":/stateWalk");
+        }
     }
 }
 
