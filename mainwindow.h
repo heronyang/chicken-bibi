@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QLabel>
+#include <QStack>
 
 class QPushButton;
 
@@ -23,12 +24,10 @@ private:
 
     enum State {
         normal,
-        walk,
         hungry,
         sick,
         sleepy,
         dirty,
-        lightOff,
         inAction
     };
 
@@ -47,6 +46,11 @@ private:
     QLabel *fullnessBar = NULL;
     QLabel *happinessBar = NULL;
 
+    QStack<State> stateStack;
+
+    int happiness = 5;
+    int fullness = 5;
+
     void setupUiComponents();
     void setupStaticBackground();
     void setupAnimatedBackground();
@@ -55,6 +59,16 @@ private:
     void setupButtons();
     void setupBibi();
     void setupHourClock();
+
+    void setFullnessToFull();
+    void increaseFullness();
+    void decreaseFullness();
+    void syncFullness();
+
+    void setHappinessToFull();
+    void increaseHappiness();
+    void decreaseHappiness();
+    void syncHappiness();
 
     void setFullnessTo(int);
     void setHappinessTo(int);
@@ -91,10 +105,7 @@ private slots:
     void buttonTurnOffLightHandler();
 
     void actionFinishHandler();
-    void becomeHungry();
-    void becomeSick();
-    void becomeSleepy();
-    void becomeDirty();
+    void addAndDisplayNewState(State);
 
     void standInNormalState();
     void walkInNormalState();

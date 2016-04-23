@@ -49,8 +49,8 @@ void MainWindow::setupAnimatedBackground() {
 void MainWindow::setupStatus() {
     drawStaticImageAt(":/fullness", -10, -10, 135, 135);
     drawStaticImageAt(":/happiness", 290, -10, 135, 135);
-    setFullnessTo(5);
-    setHappinessTo(5);
+    setFullnessToFull();
+    setHappinessToFull();
 }
 
 void MainWindow::drawStaticImageAt(std::string resName, int x, int y, int w, int h) {
@@ -60,6 +60,57 @@ void MainWindow::drawStaticImageAt(std::string resName, int x, int y, int w, int
     topLevelLabel->setGeometry(x, y, w, h);
     topLevelLabel->show();
 }
+
+
+void MainWindow::setFullnessToFull() {
+    fullness = 5;
+    syncFullness();
+}
+
+void MainWindow::increaseFullness() {
+    if(fullness < 5) {
+        fullness ++;
+    }
+    syncFullness();
+}
+
+void MainWindow::decreaseFullness() {
+    if(fullness > 0) {
+        fullness --;
+    }
+    syncFullness();
+    if(fullness == 0) {
+        addAndDisplayNewState(hungry);
+    }
+}
+
+void MainWindow::syncFullness() {
+    setFullnessTo(fullness);
+}
+
+void MainWindow::setHappinessToFull() {
+    happiness = 5;
+    syncHappiness();
+}
+
+void MainWindow::increaseHappiness() {
+    if(happiness < 5) {
+        happiness ++;
+    }
+    syncHappiness();
+}
+
+void MainWindow::decreaseHappiness() {
+    if(happiness > 0) {
+        happiness --;
+    }
+    syncHappiness();
+}
+
+void MainWindow::syncHappiness() {
+    setHappinessTo(happiness);
+}
+
 
 void MainWindow::setFullnessTo(int val) {
     if(fullnessBar == NULL) {
@@ -106,6 +157,14 @@ void MainWindow::changeBibiToAction(Action action, int duration) {
     case happy:
         changeBibiAnimationTo(":/stateHappy");
         break;
+    case eat:
+        break;
+    case shower:
+        break;
+    case heal:
+        break;
+    case play:
+        break;
     }
 
     QTimer *timer = new QTimer(this);
@@ -114,7 +173,19 @@ void MainWindow::changeBibiToAction(Action action, int duration) {
 }
 
 void MainWindow::actionFinishHandler() {
-    changeBibiToState(normal);
+
+    if(stateStack.isEmpty()) {
+        changeBibiToState(normal);
+        return;
+    }
+
+    stateStack.pop();
+    if(stateStack.isEmpty()) {
+        changeBibiToState(normal);
+    } else {
+        changeBibiToState(stateStack.top());
+    }
+
 }
 
 void MainWindow::changeBibiToState(State state) {
@@ -190,20 +261,9 @@ void MainWindow::randomChangeToWalk() {
 }
 
 
-void MainWindow::becomeHungry() {
-    changeBibiToState(hungry);
-}
-
-void MainWindow::becomeSick() {
-    changeBibiToState(sick);
-}
-
-void MainWindow::becomeSleepy() {
-    changeBibiToState(sleepy);
-}
-
-void MainWindow::becomeDirty() {
-    changeBibiToState(dirty);
+void MainWindow::addAndDisplayNewState(State newState) {
+    // stateStack.push(newState);
+    changeBibiToState(newState);
 }
 
 void MainWindow::changeBibiAnimationTo(std::string resName) {
@@ -245,18 +305,14 @@ void MainWindow::setupButtons() {
 
 void MainWindow::buttonEatHandler() {
     qDebug("eat button clicked");
-    // TODO: eating animation here
+    increaseFullness();
     changeBibiToAction(happy, 5000);
 }
 
 void MainWindow::buttonShowerHandler() {
     qDebug("shower button clicked");
-    QTimer *timer = new QTimer(this);
-    timer->singleShot(1000, this, SLOT(becomeSleepy()));
-    if(currentState != dirty) {
-        return;
-    }
-    changeBibiToAction(happy, 5000);
+    // changeBibiToAction(happy, 5000);
+    decreaseFullness();
 }
 
 void MainWindow::buttonHealHandler() {
