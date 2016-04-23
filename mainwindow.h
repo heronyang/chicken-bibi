@@ -99,6 +99,7 @@ private:
 
     void randomChangeToStand();
     void randomChangeToWalk();
+    void standInNormalStateForced();
 
     int backgroundAnimationTimerId;
     int backgroundImageOffset = 0;

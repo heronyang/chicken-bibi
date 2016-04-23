@@ -206,7 +206,7 @@ void MainWindow::changeBibiToState(State state) {
 
     switch (state) {
     case normal:
-        standInNormalState();
+        standInNormalStateForced();
         break;
     case hungry:
         changeBibiAnimationTo(":/stateHungry");
@@ -252,12 +252,18 @@ void MainWindow::randomChangeToStand() {
 }
 
 void MainWindow::standInNormalState() {
+    if(lastNormalStateAction == stand) {
+        return;
+    }
+}
+
+void MainWindow::standInNormalStateForced() {
 
     qDebug("in normal state stand");
 
     stopBackgroundAnimation();
 
-    if(!stateStack.isEmpty() || isInAction || lastNormalStateAction == stand) {
+    if(!stateStack.isEmpty() || isInAction) {
         qDebug("stand handle is ignored");
         return;
     }

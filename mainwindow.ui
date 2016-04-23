@@ -38,9 +38,8 @@
          <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
         </property>
         <property name="icon">
-         <iconset>
-         <normaloff>:/buttonEat</normaloff>
-         </iconset>
+         <iconset resource="application.qrc">
+          <normaloff>:/buttonEat</normaloff>:/buttonEat</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -54,14 +53,13 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="buttonShower">
+       <widget class="QPushButton" name="buttonPlay">
         <property name="styleSheet">
          <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/buttonShower</normaloff>
-          </iconset>
+         <iconset resource="application.qrc">
+          <normaloff>:/buttonPlay</normaloff>:/buttonPlay</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -72,14 +70,13 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="buttonPlay">
+       <widget class="QPushButton" name="buttonShower">
         <property name="styleSheet">
          <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
         </property>
         <property name="icon">
-        <iconset>
-        <normaloff>:/buttonPlay</normaloff>
-        </iconset>
+         <iconset resource="application.qrc">
+          <normaloff>:/buttonShower</normaloff>:/buttonShower</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -95,9 +92,8 @@
          <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
         </property>
         <property name="icon">
-        <iconset>
-        <normaloff>:/buttonTurnOffLight</normaloff>
-        </iconset>
+         <iconset resource="application.qrc">
+          <normaloff>:/buttonTurnOffLight</normaloff>:/buttonTurnOffLight</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -113,9 +109,8 @@
          <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
         </property>
         <property name="icon">
-        <iconset>
-        <normaloff>:/buttonHeal</normaloff>
-        </iconset>
+         <iconset resource="application.qrc">
+          <normaloff>:/buttonHeal</normaloff>:/buttonHeal</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -144,6 +139,8 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="application.qrc"/>
+ </resources>
  <connections/>
 </ui>
