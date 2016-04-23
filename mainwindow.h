@@ -76,6 +76,8 @@ private:
     void changeBibiToAction(Action, int);
     void changeBibiToState(State);
 
+    void stopBackgroundAnimation();
+
     void changeBibiAnimationTo(std::string);
     void removePreviousAnimationIfExists();
 

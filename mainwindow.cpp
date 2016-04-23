@@ -155,6 +155,7 @@ void MainWindow::changeBibiToAction(Action action, int duration) {
         changeBibiAnimationTo(":/stateBorn");
         break;
     case happy:
+        stopBackgroundAnimation();
         changeBibiAnimationTo(":/stateHappy");
         break;
     case eat:
@@ -262,8 +263,13 @@ void MainWindow::randomChangeToWalk() {
 
 
 void MainWindow::addAndDisplayNewState(State newState) {
-    // stateStack.push(newState);
+    stopBackgroundAnimation();
     changeBibiToState(newState);
+}
+
+void MainWindow::stopBackgroundAnimation() {
+    // TODO: should check if animation is active before killing it
+    killTimer(backgroundAnimationTimerId);
 }
 
 void MainWindow::changeBibiAnimationTo(std::string resName) {
