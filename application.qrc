@@ -15,5 +15,19 @@
         <file alias="stateWalk">res/stateWalk.gif</file>
         <file alias="stateWalkBackward">res/stateWalkBackward.gif</file>
         <file alias="lightOffScene">res/lightOffScene.gif</file>
+        <file alias="fullness0">res/fullness-0.png</file>
+        <file alias="fullness1">res/fullness-1.png</file>
+        <file alias="fullness2">res/fullness-2.png</file>
+        <file alias="fullness3">res/fullness-3.png</file>
+        <file alias="fullness4">res/fullness-4.png</file>
+        <file alias="fullness5">res/fullness-5.png</file>
+        <file alias="fullness">res/fullness.png</file>
+        <file alias="happiness0">res/happiness-0.png</file>
+        <file alias="happiness1">res/happiness-1.png</file>
+        <file alias="happiness2">res/happiness-2.png</file>
+        <file alias="happiness3">res/happiness-3.png</file>
+        <file alias="happiness4">res/happiness-4.png</file>
+        <file alias="happiness5">res/happiness-5.png</file>
+        <file alias="happiness">res/happiness.png</file>
     </qresource>
 </RCC>
