@@ -147,7 +147,6 @@ void MainWindow::setupBibi() {
 
 void MainWindow::setupHourClock() {
     QTimer *clock = new QTimer(this);
-    hourClockTickHandler();
     connect(clock, SIGNAL(timeout()), this, SLOT(hourClockTickHandler()));
     clock->start(1000 * 60 * 60); // hourly
 }
@@ -330,6 +329,7 @@ void MainWindow::hourClockTickHandler() {
     QDateTime now = QDateTime::currentDateTime();
     int hour = now.toString("H").toInt();
     qDebug("%d", hour);
+    hourlyWorkAssignment(hour);
 }
 
 void MainWindow::hourlyWorkAssignment(int hour) {
@@ -346,7 +346,7 @@ void MainWindow::hourlyWorkAssignment(int hour) {
         addAndDisplayNewState(dirty);
     }
 
-    if(hour == 22) {
+    if(hour >= 22 || hour <= 7) {
         addAndDisplayNewState(sleepy);
     }
 
@@ -395,6 +395,7 @@ void MainWindow::buttonShowerHandler() {
         return;
     }
     if(!stateStack.isEmpty() && stateStack.top() == dirty) {
+        increaseHappiness();
         happyWithFinishHandler(killCurrentNeed);
     }
 }
@@ -406,6 +407,7 @@ void MainWindow::buttonHealHandler() {
         return;
     }
     if(!stateStack.isEmpty() && stateStack.top() == heal) {
+        setHappinessToFull();
         happyWithFinishHandler(killCurrentNeed);
     }
 }
@@ -425,7 +427,6 @@ void MainWindow::buttonPlayHandler() {
 
 void MainWindow::buttonTurnOffLightHandler() {
     qDebug("turn off light button clicked");
-    /*
     if(isInAction) {
         qDebug("in action, blocked");
         return;
@@ -433,8 +434,6 @@ void MainWindow::buttonTurnOffLightHandler() {
     if(!stateStack.isEmpty() && stateStack.top() == sleepy) {
         turnOffLight();
     }
-    */
-    decreaseFullness();
 }
 
 void MainWindow::turnOffLight() {
