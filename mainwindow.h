@@ -97,6 +97,9 @@ private:
     void changeBibiAnimationTo(std::string);
     void removePreviousAnimationIfExists();
 
+    void hourlyWorkAssignment(int);
+    bool randomYesInEvery(int val);
+
     void randomChangeToStand();
     void randomChangeToWalk();
     void standInNormalStateForced();

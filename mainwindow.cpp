@@ -147,6 +147,7 @@ void MainWindow::setupBibi() {
 
 void MainWindow::setupHourClock() {
     QTimer *clock = new QTimer(this);
+    hourClockTickHandler();
     connect(clock, SIGNAL(timeout()), this, SLOT(hourClockTickHandler()));
     clock->start(1000 * 60 * 60); // hourly
 }
@@ -184,6 +185,8 @@ void MainWindow::nullFinishHandler() {
 
 void MainWindow::killCurrentNeedFinishHandler() {
 
+    isInAction = false;
+
     if(stateStack.isEmpty()) {
         changeBibiToState(normal);
         return;
@@ -191,18 +194,16 @@ void MainWindow::killCurrentNeedFinishHandler() {
 
     stateStack.pop();
     if(stateStack.isEmpty()) {
+        qDebug("is empty, and switching to normal");
         changeBibiToState(normal);
     } else {
+        qDebug("is not empty");
         changeBibiToState(stateStack.top());
     }
-
-    isInAction = false;
 
 }
 
 void MainWindow::changeBibiToState(State state) {
-
-    currentState = state;
 
     switch (state) {
     case normal:
@@ -286,6 +287,9 @@ void MainWindow::randomChangeToWalk() {
 
 
 void MainWindow::addAndDisplayNewState(State newState) {
+    if(!stateStack.isEmpty() && newState == stateStack.top()) {
+        return;
+    }
     stopBackgroundAnimation();
     stateStack.push(newState);
     changeBibiToState(newState);
@@ -324,7 +328,41 @@ void MainWindow::removePreviousAnimationIfExists() {
 
 void MainWindow::hourClockTickHandler() {
     QDateTime now = QDateTime::currentDateTime();
-    qDebug("%s", qPrintable(now.toString()));
+    int hour = now.toString("H").toInt();
+    qDebug("%d", hour);
+}
+
+void MainWindow::hourlyWorkAssignment(int hour) {
+
+    if(hour % 2 == 0) {
+        decreaseFullness();
+    }
+
+    if(hour % 3 == 0) {
+        decreaseHappiness();
+    }
+
+    if(hour == 19) {    // 7pm
+        addAndDisplayNewState(dirty);
+    }
+
+    if(hour == 22) {
+        addAndDisplayNewState(sleepy);
+    }
+
+    if(hour == 8) {
+        morningArrived();
+    }
+
+    if(randomYesInEvery(72)) {
+        addAndDisplayNewState(sick);
+    }
+
+}
+
+bool MainWindow::randomYesInEvery(int val) {
+    srand(time(0));
+    return (rand() % val) == 0; // 20~40 seconds
 }
 
 void MainWindow::setupButtons() {
@@ -384,6 +422,7 @@ void MainWindow::buttonPlayHandler() {
 
 void MainWindow::buttonTurnOffLightHandler() {
     qDebug("turn off light button clicked");
+    /*
     if(isInAction) {
         qDebug("in action, blocked");
         return;
@@ -391,6 +430,8 @@ void MainWindow::buttonTurnOffLightHandler() {
     if(!stateStack.isEmpty() && stateStack.top() == sleepy) {
         turnOffLight();
     }
+    */
+    decreaseFullness();
 }
 
 void MainWindow::turnOffLight() {
@@ -447,12 +488,12 @@ void MainWindow::timerEvent(QTimerEvent *event) {
 void MainWindow::checkAndTurnBackgroundImageFacing() {
     if (backgroundImageOffset >= 1800 - 600) {
         backgroundImageFaceRight = false;
-        if(currentState == normal) {
+        if(!isInAction && stateStack.isEmpty()) {
             changeBibiAnimationTo(":/stateWalkBackward");
         }
     } else if (backgroundImageOffset <= 0) {
         backgroundImageFaceRight = true;
-        if(currentState == normal) {
+        if(!isInAction && stateStack.isEmpty()) {
             changeBibiAnimationTo(":/stateWalk");
         }
     }
