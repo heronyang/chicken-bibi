@@ -44,6 +44,12 @@ private:
         killCurrentNeed
     };
 
+    enum NormalStateAction {
+        stand,
+        walk,
+        noAction
+    };
+
     State currentState = normal;
     QLabel *bibiContainer = NULL;
     QLabel *lightOffContainer = NULL;
@@ -56,6 +62,8 @@ private:
     int fullness = 5;
 
     bool isInAction = false;
+
+    NormalStateAction lastNormalStateAction = noAction;
 
     void setupUiComponents();
     void setupStaticBackground();
@@ -113,8 +121,6 @@ private slots:
     void buttonHealHandler();
     void buttonPlayHandler();
     void buttonTurnOffLightHandler();
-
-    void bornFinishHandler();
 
     void nullFinishHandler();
     void killCurrentNeedFinishHandler();

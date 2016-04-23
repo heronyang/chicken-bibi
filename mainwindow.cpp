@@ -155,12 +155,7 @@ void MainWindow::born() {
     isInAction = true;
     changeBibiAnimationTo(":/stateBorn");
     QTimer *timer = new QTimer(this);
-    timer->singleShot(7000, this, SLOT(bornFinishHandler()));
-}
-
-void MainWindow::bornFinishHandler() {
-    changeBibiToState(normal);
-    isInAction =false;
+    timer->singleShot(7000, this, SLOT(nullFinishHandler()));
 }
 
 void MainWindow::happyWithFinishHandler(HandlerType handlerType) {
@@ -183,8 +178,8 @@ void MainWindow::happyWithFinishHandler(HandlerType handlerType) {
 }
 
 void MainWindow::nullFinishHandler() {
-    changeBibiToState(normal);
     isInAction = false;
+    changeBibiToState(normal);
 }
 
 void MainWindow::killCurrentNeedFinishHandler() {
@@ -231,7 +226,8 @@ void MainWindow::changeBibiToState(State state) {
 }
 
 void MainWindow::walkInNormalState() {
-    if(currentState != normal) {
+    if(!stateStack.isEmpty() || isInAction || lastNormalStateAction == walk) {
+        qDebug("walk handle is ignored");
         return;
     }
     setupAnimatedBackground();
@@ -240,6 +236,7 @@ void MainWindow::walkInNormalState() {
     } else {
         changeBibiAnimationTo(":/stateWalkBackward");
     }
+    lastNormalStateAction = walk;
     randomChangeToStand();
 }
 
@@ -256,14 +253,18 @@ void MainWindow::randomChangeToStand() {
 
 void MainWindow::standInNormalState() {
 
-    killTimer(backgroundAnimationTimerId);
-
     qDebug("in normal state stand");
-    if(currentState != normal) {
+
+    stopBackgroundAnimation();
+
+    if(!stateStack.isEmpty() || isInAction || lastNormalStateAction == stand) {
+        qDebug("stand handle is ignored");
         return;
     }
     changeBibiAnimationTo(":/stateNormal");
+    lastNormalStateAction = stand;
     randomChangeToWalk();
+
 }
 
 void MainWindow::randomChangeToWalk() {
@@ -285,8 +286,10 @@ void MainWindow::addAndDisplayNewState(State newState) {
 }
 
 void MainWindow::stopBackgroundAnimation() {
-    // TODO: should check if animation is active before killing it
-    killTimer(backgroundAnimationTimerId);
+    if(backgroundAnimationTimerId) {
+        killTimer(backgroundAnimationTimerId);
+        backgroundAnimationTimerId = 0;
+    }
 }
 
 void MainWindow::changeBibiAnimationTo(std::string resName) {
