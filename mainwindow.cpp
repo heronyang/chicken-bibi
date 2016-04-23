@@ -219,7 +219,7 @@ void MainWindow::changeBibiToState(State state) {
         changeBibiAnimationTo(":/stateSleep");
         break;
     case dirty:
-        // TODO: wait for the gif file
+        changeBibiAnimationTo(":/stateDirty");
         break;
 
     }
@@ -414,6 +414,9 @@ void MainWindow::buttonPlayHandler() {
     qDebug("play button clicked");
     if(isInAction) {
         qDebug("in action, blocked");
+        return;
+    }
+    if(!stateStack.isEmpty()) {
         return;
     }
     increaseHappiness();
