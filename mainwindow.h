@@ -44,13 +44,20 @@ private:
     State currentState = normal;
     QLabel *bibiContainer = NULL;
     QLabel *lightOffContainer = NULL;
+    QLabel *fullnessBar = NULL;
+    QLabel *happinessBar = NULL;
 
     void setupUiComponents();
     void setupStaticBackground();
     void setupAnimatedBackground();
+    void setupStatus();
+    void drawStaticImageAt(std::string, int, int, int, int);
     void setupButtons();
     void setupBibi();
     void setupHourClock();
+
+    void setFullnessTo(int);
+    void setHappinessTo(int);
 
     void changeBibiToAction(Action, int);
     void changeBibiToState(State);

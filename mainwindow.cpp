@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::setupUiComponents() {
     setupStaticBackground();
+    setupStatus();
     setupButtons();
     setupBibi();
     setupHourClock();
@@ -43,6 +44,44 @@ void MainWindow::setupStaticBackground() {
 
 void MainWindow::setupAnimatedBackground() {
     backgroundAnimationTimerId = startTimer(20);
+}
+
+void MainWindow::setupStatus() {
+    drawStaticImageAt(":/fullness", -10, -10, 135, 135);
+    drawStaticImageAt(":/happiness", 290, -10, 135, 135);
+    setFullnessTo(5);
+    setHappinessTo(5);
+}
+
+void MainWindow::drawStaticImageAt(std::string resName, int x, int y, int w, int h) {
+    QLabel *topLevelLabel = new QLabel(this);
+    QPixmap pixmap(QString::fromStdString(resName));
+    topLevelLabel->setPixmap(pixmap);
+    topLevelLabel->setGeometry(x, y, w, h);
+    topLevelLabel->show();
+}
+
+void MainWindow::setFullnessTo(int val) {
+    if(fullnessBar == NULL) {
+        fullnessBar = new QLabel(this);
+        fullnessBar->setGeometry(100, 38, 160, 36);
+    }
+    std::string resName = ":/fullness" + std::to_string (val);
+    QPixmap pixmap(QString::fromStdString(resName));
+    fullnessBar->setPixmap(pixmap);
+    fullnessBar->show();
+}
+
+
+void MainWindow::setHappinessTo(int val) {
+    if(happinessBar == NULL) {
+        happinessBar = new QLabel(this);
+        happinessBar->setGeometry(400, 38, 160, 36);
+    }
+    std::string resName = ":/happiness" + std::to_string (val);
+    QPixmap pixmap(QString::fromStdString(resName));
+    happinessBar->setPixmap(pixmap);
+    happinessBar->show();
 }
 
 void MainWindow::setupBibi() {
@@ -81,7 +120,6 @@ void MainWindow::actionFinishHandler() {
 void MainWindow::changeBibiToState(State state) {
 
     currentState = state;
-
 
     switch (state) {
     case normal:
