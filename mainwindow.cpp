@@ -49,8 +49,8 @@ void MainWindow::setupAnimatedBackground() {
 void MainWindow::setupStatus() {
     drawStaticImageAt(":/fullness", -10, -10, 135, 135);
     drawStaticImageAt(":/happiness", 290, -10, 135, 135);
-    setFullnessToFull();
-    setHappinessToFull();
+    setFullnessTo(3);
+    setHappinessTo(3);
 }
 
 void MainWindow::drawStaticImageAt(std::string resName, int x, int y, int w, int h) {
@@ -117,6 +117,7 @@ void MainWindow::syncHappiness() {
 
 
 void MainWindow::setFullnessTo(int val) {
+    fullness = val;
     if(fullnessBar == NULL) {
         fullnessBar = new QLabel(this);
         fullnessBar->setGeometry(100, 38, 160, 36);
@@ -129,6 +130,7 @@ void MainWindow::setFullnessTo(int val) {
 
 
 void MainWindow::setHappinessTo(int val) {
+    happiness = val;
     if(happinessBar == NULL) {
         happinessBar = new QLabel(this);
         happinessBar->setGeometry(400, 38, 160, 36);
@@ -182,7 +184,7 @@ void MainWindow::happyWithFinishHandler(HandlerType handlerType) {
 
 void MainWindow::nullFinishHandler() {
     changeBibiToState(normal);
-    isInAction = true;
+    isInAction = false;
 }
 
 void MainWindow::killCurrentNeedFinishHandler() {
@@ -326,7 +328,10 @@ void MainWindow::setupButtons() {
 
 void MainWindow::buttonEatHandler() {
     qDebug("eat button clicked");
-    if(isInAction)  return;
+    if(isInAction) {
+        qDebug("in action, blocked");
+        return;
+    }
     if(stateStack.isEmpty()) {
         increaseFullness();
         happyWithFinishHandler(nothing);
@@ -338,7 +343,10 @@ void MainWindow::buttonEatHandler() {
 
 void MainWindow::buttonShowerHandler() {
     qDebug("shower button clicked");
-    if(isInAction)  return;
+    if(isInAction) {
+        qDebug("in action, blocked");
+        return;
+    }
     if(!stateStack.isEmpty() && stateStack.top() == dirty) {
         happyWithFinishHandler(killCurrentNeed);
     }
@@ -346,7 +354,10 @@ void MainWindow::buttonShowerHandler() {
 
 void MainWindow::buttonHealHandler() {
     qDebug("heal button clicked");
-    if(isInAction)  return;
+    if(isInAction) {
+        qDebug("in action, blocked");
+        return;
+    }
     if(!stateStack.isEmpty() && stateStack.top() == heal) {
         happyWithFinishHandler(killCurrentNeed);
     }
@@ -354,14 +365,20 @@ void MainWindow::buttonHealHandler() {
 
 void MainWindow::buttonPlayHandler() {
     qDebug("play button clicked");
-    if(isInAction)  return;
+    if(isInAction) {
+        qDebug("in action, blocked");
+        return;
+    }
     increaseHappiness();
     happyWithFinishHandler(nothing);
 }
 
 void MainWindow::buttonTurnOffLightHandler() {
     qDebug("turn off light button clicked");
-    if(isInAction)  return;
+    if(isInAction) {
+        qDebug("in action, blocked");
+        return;
+    }
     if(!stateStack.isEmpty() && stateStack.top() == sleepy) {
         turnOffLight();
     }
