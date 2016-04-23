@@ -61,27 +61,31 @@ void MainWindow::drawStaticImageAt(std::string resName, int x, int y, int w, int
     topLevelLabel->show();
 }
 
-
 void MainWindow::setFullnessToFull() {
     fullness = 5;
     syncFullness();
 }
 
 void MainWindow::increaseFullness() {
+
     if(fullness < 5) {
         fullness ++;
     }
     syncFullness();
+
 }
 
 void MainWindow::decreaseFullness() {
+
     if(fullness > 0) {
         fullness --;
     }
     syncFullness();
+
     if(fullness == 0) {
         addAndDisplayNewState(hungry);
     }
+
 }
 
 void MainWindow::syncFullness() {
@@ -136,7 +140,7 @@ void MainWindow::setHappinessTo(int val) {
 }
 
 void MainWindow::setupBibi() {
-    changeBibiToAction(born, 7000);
+    born();
 }
 
 void MainWindow::setupHourClock() {
@@ -145,35 +149,43 @@ void MainWindow::setupHourClock() {
     clock->start(1000 * 60 * 60); // hourly
 }
 
+void MainWindow::born() {
+    isInAction = true;
+    changeBibiAnimationTo(":/stateBorn");
+    QTimer *timer = new QTimer(this);
+    timer->singleShot(7000, this, SLOT(bornFinishHandler()));
+}
 
-void MainWindow::changeBibiToAction(Action action, int duration) {
+void MainWindow::bornFinishHandler() {
+    changeBibiToState(normal);
+    isInAction =false;
+}
 
-    currentState = inAction;
+void MainWindow::happyWithFinishHandler(HandlerType handlerType) {
 
-    switch (action) {
-    case born:
-        changeBibiAnimationTo(":/stateBorn");
-        break;
-    case happy:
-        stopBackgroundAnimation();
-        changeBibiAnimationTo(":/stateHappy");
-        break;
-    case eat:
-        break;
-    case shower:
-        break;
-    case heal:
-        break;
-    case play:
-        break;
-    }
+    isInAction = true;
+
+    stopBackgroundAnimation();
+    changeBibiAnimationTo(":/stateHappy");
 
     QTimer *timer = new QTimer(this);
-    timer->singleShot(duration, this, SLOT(actionFinishHandler()));
+    switch(handlerType) {
+        case nothing:
+            timer->singleShot(5000, this, SLOT(nullFinishHandler()));
+            break;
+        case killCurrentNeed:
+            timer->singleShot(5000, this, SLOT(killCurrentNeedFinishHandler()));
+            break;
+    }
 
 }
 
-void MainWindow::actionFinishHandler() {
+void MainWindow::nullFinishHandler() {
+    changeBibiToState(normal);
+    isInAction = true;
+}
+
+void MainWindow::killCurrentNeedFinishHandler() {
 
     if(stateStack.isEmpty()) {
         changeBibiToState(normal);
@@ -186,6 +198,8 @@ void MainWindow::actionFinishHandler() {
     } else {
         changeBibiToState(stateStack.top());
     }
+
+    isInAction = false;
 
 }
 
@@ -264,6 +278,7 @@ void MainWindow::randomChangeToWalk() {
 
 void MainWindow::addAndDisplayNewState(State newState) {
     stopBackgroundAnimation();
+    stateStack.push(newState);
     changeBibiToState(newState);
 }
 
@@ -311,33 +326,44 @@ void MainWindow::setupButtons() {
 
 void MainWindow::buttonEatHandler() {
     qDebug("eat button clicked");
-    increaseFullness();
-    changeBibiToAction(happy, 5000);
+    if(isInAction)  return;
+    if(stateStack.isEmpty()) {
+        increaseFullness();
+        happyWithFinishHandler(nothing);
+    } else if (stateStack.top() == hungry) {
+        increaseFullness();
+        happyWithFinishHandler(killCurrentNeed);
+    }
 }
 
 void MainWindow::buttonShowerHandler() {
     qDebug("shower button clicked");
-    // changeBibiToAction(happy, 5000);
-    decreaseFullness();
+    if(isInAction)  return;
+    if(!stateStack.isEmpty() && stateStack.top() == dirty) {
+        happyWithFinishHandler(killCurrentNeed);
+    }
 }
 
 void MainWindow::buttonHealHandler() {
     qDebug("heal button clicked");
-    changeBibiToAction(happy, 5000);
+    if(isInAction)  return;
+    if(!stateStack.isEmpty() && stateStack.top() == heal) {
+        happyWithFinishHandler(killCurrentNeed);
+    }
 }
 
 void MainWindow::buttonPlayHandler() {
     qDebug("play button clicked");
-    changeBibiToAction(happy, 5000);
+    if(isInAction)  return;
+    increaseHappiness();
+    happyWithFinishHandler(nothing);
 }
 
 void MainWindow::buttonTurnOffLightHandler() {
     qDebug("turn off light button clicked");
-    turnOffLight();
-    QTimer *timer = new QTimer(this);
-    timer->singleShot(3000, this, SLOT(morningArrived()));
-    if(currentState != sleepy) {
-        return;
+    if(isInAction)  return;
+    if(!stateStack.isEmpty() && stateStack.top() == sleepy) {
+        turnOffLight();
     }
 }
 
@@ -363,6 +389,7 @@ void MainWindow::turnOnLight() {
 
 void MainWindow::morningArrived() {
     turnOnLight();
+    happyWithFinishHandler(killCurrentNeed);
 }
 
 MainWindow::~MainWindow() {

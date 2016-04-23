@@ -32,12 +32,16 @@ private:
     };
 
     enum Action {
-        born,
         happy,
         eat,
         heal,
         shower,
         play
+    };
+
+    enum HandlerType {
+        nothing,
+        killCurrentNeed
     };
 
     State currentState = normal;
@@ -51,6 +55,8 @@ private:
     int happiness = 5;
     int fullness = 5;
 
+    bool isInAction = false;
+
     void setupUiComponents();
     void setupStaticBackground();
     void setupAnimatedBackground();
@@ -59,6 +65,9 @@ private:
     void setupButtons();
     void setupBibi();
     void setupHourClock();
+
+    void born();
+    void happyWithFinishHandler(HandlerType);
 
     void setFullnessToFull();
     void increaseFullness();
@@ -73,7 +82,6 @@ private:
     void setFullnessTo(int);
     void setHappinessTo(int);
 
-    void changeBibiToAction(Action, int);
     void changeBibiToState(State);
 
     void stopBackgroundAnimation();
@@ -106,7 +114,10 @@ private slots:
     void buttonPlayHandler();
     void buttonTurnOffLightHandler();
 
-    void actionFinishHandler();
+    void bornFinishHandler();
+
+    void nullFinishHandler();
+    void killCurrentNeedFinishHandler();
     void addAndDisplayNewState(State);
 
     void standInNormalState();
