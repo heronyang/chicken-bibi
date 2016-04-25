@@ -9,6 +9,7 @@
 #include <QThread>
 #include <QApplication>
 #include <QDateTime>
+#include <QIcon>
 
 #include <string>
 #include <ctime>

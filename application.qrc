@@ -30,5 +30,6 @@
         <file alias="happiness4">res/happiness-4.png</file>
         <file alias="happiness5">res/happiness-5.png</file>
         <file alias="happiness">res/happiness.png</file>
+        <file alias="icon">res/icon.icns</file>
     </qresource>
 </RCC>
