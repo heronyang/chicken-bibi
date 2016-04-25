@@ -111,6 +111,7 @@ private:
 
     void turnOffLight();
     void turnOnLight();
+    bool isLightOn();
     void delay();
 
 protected:

@@ -350,8 +350,10 @@ void MainWindow::hourlyWorkAssignment(int hour) {
         addAndDisplayNewState(sleepy);
     }
 
-    if(hour == 8) {
-        morningArrived();
+    if(hour >= 8 && hour <= 21) {
+        if(!isLightOn()) {
+            morningArrived();
+        }
     }
 
     if(randomYesInEvery(72)) {
@@ -454,6 +456,10 @@ void MainWindow::turnOnLight() {
         lightOffContainer->deleteLater();
         lightOffContainer = NULL;
     }
+}
+
+bool MainWindow::isLightOn() {
+    return lightOffContainer == NULL;
 }
 
 void MainWindow::morningArrived() {
