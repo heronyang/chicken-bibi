@@ -348,7 +348,9 @@ void MainWindow::hourlyWorkAssignment(int hour) {
     }
 
     if(hour >= 22 || hour <= 7) {
-        addAndDisplayNewState(sleepy);
+        if(stateStack.isEmpty() || stateStack.top() != sleepy) {
+            addAndDisplayNewState(sleepy);
+        }
     }
 
     if(hour >= 8 && hour <= 21) {
