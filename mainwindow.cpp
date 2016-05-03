@@ -84,7 +84,9 @@ void MainWindow::decreaseFullness() {
     syncFullness();
 
     if(fullness == 0) {
-        addAndDisplayNewState(hungry);
+        if(stateStack.isEmpty() || stateStack.top() != hungry) {
+            addAndDisplayNewState(hungry);
+        }
     }
 
 }
@@ -411,7 +413,7 @@ void MainWindow::buttonHealHandler() {
         qDebug("in action, blocked");
         return;
     }
-    if(!stateStack.isEmpty() && stateStack.top() == heal) {
+    if(!stateStack.isEmpty() && stateStack.top() == sick) {
         setHappinessToFull();
         happyWithFinishHandler(killCurrentNeed);
     }
